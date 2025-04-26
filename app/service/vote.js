@@ -1,14 +1,20 @@
 const Service = require('egg').Service;
 
 class VoteService extends Service {
-  // 提交投票
+  /**
+   * 提交投票
+   * @param {Number} electionId - 选举id
+   * @param {Number} userId - 发起投票的用户id
+   * @param {Array} candidateIds - 选中的选举人id数组
+   * @return Boolean
+   */
   async submitVote(electionId, userId, candidateIds) {
     const { ctx, app } = this;
     
     // 检查选举是否正在进行
     const election = await ctx.model.Election.findOne({ where: { id: electionId } }, ['is_active']);
     if (!election || !election.is_active) {
-      ctx.throw(400, '选择的选举不存在或未开始选举！');
+      ctx.throw(400, '选择的选举不存在或选举未开始！');
     }
     
     // 获取所有候选人数量
@@ -20,7 +26,7 @@ class VoteService extends Service {
       ctx.throw(400, `每个用戶最多可以投${maxVotes}票`);
     }
     
-    // 检查后续安然是否存在
+    // 检查候选人是否存在
     const candidates = await ctx.model.Candidate.findAll({
       where: { id: candidateIds }
     });
@@ -63,7 +69,11 @@ class VoteService extends Service {
     }
   }
   
-  // 获取指定选举的投票结果 (工作人员使用)
+  /**
+   * 获取指定选举的投票结果 (工作人员使用)
+   * @param {Number} electionId - 选举id
+   * @return Object
+   */
   async getResults(electionId) {
     const { ctx } = this;
     const election = await ctx.model.Election.findOne({ where: { id: electionId } }, ['title']);

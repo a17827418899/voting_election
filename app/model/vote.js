@@ -4,13 +4,13 @@ module.exports = app => {
   const { INTEGER, DATE } = app.Sequelize;
 
   const vote = app.model.define('vote', {
-    id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    user_id: { type: INTEGER },
-    candidate_id: { type: INTEGER },
-    election_id: { type: INTEGER },
-    voted_at: { type: INTEGER, default: Date.now() },
-    createdAt: { type: DATE, default: Date.now() },
-    updatedAt: { type: DATE, default: Date.now() },
+    id: { type: INTEGER, primaryKey: true, autoIncrement: true, comment: '主键，投票id' },
+    user_id: { type: INTEGER, comment: '用户id' },
+    candidate_id: { type: INTEGER, comment: '候选人id' },
+    election_id: { type: INTEGER, comment: '选举id' },
+    voted_at: { type: INTEGER, default: Date.now(), comment: '选举时间' },
+    createdAt: { type: DATE, default: Date.now(), comment: '创建时间' },
+    updatedAt: { type: DATE, default: Date.now(), comment: '修改时间' },
   }, {
     freezeTableName: true,  // 禁止自动复数化
     tableName: 'vote'    // 直接指定表名

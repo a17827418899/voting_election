@@ -4,7 +4,13 @@ const Service = require('egg').Service;
 const { Op } = require('sequelize');
 
 class ElectionService extends Service {
-    // 获取候选人列表（带分页）
+  /**
+   * 获取选举列表（分页返回）
+   * @param {Number} page - 页数，默认第一页
+   * @param {Number} pageSize - 分页大小，默认每页10条数据
+   * @param {String} keyword - 搜索关键词
+   * @return Object
+   */
   async list(page = 1, pageSize = 10, keyword = '') {
     const { ctx } = this;
     const where = {};

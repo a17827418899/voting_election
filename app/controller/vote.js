@@ -2,8 +2,24 @@
 
 const Controller = require('egg').Controller;
 
+/**
+ * 投票相关
+ */
+
 class VoteController extends Controller {
-  // 提交投票
+  /**
+   * @summary 提交投票
+   * @router post /api/vote
+   * @request query ingeter electionId 选举id
+   * @request query array candidateIds 选中的候选人id数组
+   * @property {Boolean} success - 是否成功
+   * @property {String} message - 操作描述
+   * 
+   * {
+   *   "success": true,
+   *   "message": "投票成功"
+   * }
+   */
   async submitVote() {
     const { ctx } = this;
     const { electionId, candidateIds } = ctx.request.body;

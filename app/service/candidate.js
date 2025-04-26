@@ -4,7 +4,13 @@ const Service = require('egg').Service;
 const { Op } = require('sequelize');
 
 class CandidateService extends Service {
-  // 获取候选人列表（分页返回）
+  /**
+   * 获取候选人列表（分页返回）
+   * @param {Number} page - 页数，默认第一页
+   * @param {Number} pageSize - 分页大小，默认每页10条数据
+   * @param {String} keyword - 搜索关键词
+   * @return Object
+   */
   async list(page = 1, pageSize = 10, keyword = '') {
     const { ctx } = this;
     const where = {};
@@ -33,7 +39,12 @@ class CandidateService extends Service {
     };
   }
 
-  // 创建候选人
+  /**
+   * 新增候选人
+   * @param {String} name - 候选人名称
+   * @param {String} description - 候选人描述
+   * @return Object
+   */
   async create(name, description) {
     const { ctx } = this; 
     // 验证输入
@@ -53,7 +64,13 @@ class CandidateService extends Service {
     });
   }
 
-  // 更新候选人信息
+  /**
+   * 更新候选人信息
+   * @param {Number} id - 候选人id
+   * @param {String} opinion.name - 候选人名称
+   * @param {String} opinion.description - 候选人描述
+   * @return Object
+   */
   async update(id, { name, description }) {
     const { ctx } = this;
     const candidate = await this.getById(id);
@@ -72,7 +89,11 @@ class CandidateService extends Service {
     });
   }
 
-  // 删除候选人（软删除）
+  /**
+   * 删除候选人
+   * @param {Number} id - 候选人id
+   * @return Object
+   */
   async delete(id) {
     const { ctx } = this;
     const candidate = await this.getById(id);
@@ -93,7 +114,11 @@ class CandidateService extends Service {
       };
   }
 
-  // 获取候选人详情
+  /**
+   * 获取候选人详情
+   * @param {Number} id - 候选人id
+   * @return Object
+   */
   async getById(id) {
     const { ctx } = this;
     const candidate = await ctx.model.Candidate.findByPk(id);

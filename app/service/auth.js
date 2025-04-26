@@ -3,12 +3,18 @@ const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 
 class AuthService extends Service {
-  // 生成验证码
+  /**
+   * 生成验证码
+   */
   generateVerificationCode() {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
   
-  // 发送验证码
+  /**
+   * 发送验证码
+   * @param {String} email - 邮箱
+   * @return Boolean
+   */
   async sendVerification(email) {
     const { ctx, app } = this;
     const code = this.generateVerificationCode();
@@ -38,7 +44,12 @@ class AuthService extends Service {
     return sent;
   }
   
-  // 验证邮箱
+  /**
+   * 验证邮箱
+   * @param {String} email - 邮箱
+   * @param {Number} code - 验证码
+   * @return Boolean
+   */
   async verifyEmail(email, code) {
     const { ctx } = this;
     const user = await ctx.model.User.findOne({ 
@@ -62,7 +73,12 @@ class AuthService extends Service {
     return true;
   }
   
-  // 注册用戶
+  /**
+   * 用户注册
+   * @param {String} email - 邮箱
+   * @param {String} password - 登录密码
+   * @return Boolean
+   */
   async register(email, password) {
     const { ctx } = this;
     const user = await ctx.model.User.findOne({ where: { email } });
@@ -80,8 +96,13 @@ class AuthService extends Service {
     
     return user;
   }
-  
-  // 用户登录
+
+  /**
+   * 用户登录
+   * @param {String} email - 邮箱
+   * @param {String} password - 登录密码
+   * @return Object
+   */
   async login(email, password) {
     const { ctx, app } = this;
     const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');

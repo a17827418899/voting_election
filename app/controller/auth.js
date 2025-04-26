@@ -2,8 +2,23 @@
 
 const Controller = require('egg').Controller;
 
+/**
+ * 用户认证相关
+ */
+
 class AuthController extends Controller {
-  // 发送验证码
+  /**
+   * @summary 发送验证码
+   * @router post /api/auth/send-verification
+   * @request body string email 邮箱
+   * @property {Boolean} success - 是否成功
+   * @property {String} message - 操作提示
+   * 
+   * {
+   *  "success": true,
+   *  "message": "验证码已发送"
+   * }
+   */
   async sendVerification() {
     const { ctx } = this;
     const { email } = ctx.request.body;
@@ -37,7 +52,19 @@ class AuthController extends Controller {
     }
   }
 
-  // 验证邮箱
+  /**
+   * @summary 验证邮箱
+   * @router post /api/auth/verify-email
+   * @request body string email 邮箱
+   * @request body integer code 验证码
+   * @property {Boolean} success - 是否成功
+   * @property {String} message - 操作提示
+   * 
+   * {
+   *  "success": true,
+   *  "message": "邮箱验证成功"
+   * }
+   */
   async verifyEmail() {
     const { ctx } = this;
     const { email, code } = ctx.request.body;
@@ -69,8 +96,25 @@ class AuthController extends Controller {
       ctx.status = 500;
     }
   }
-
-  // 用户注册
+ 
+  /**
+   * @summary 用户注册
+   * @router post /api/auth/register
+   * @request body string email 邮箱
+   * @request body string password 登录密码
+   * @property {Boolean} success - 是否成功
+   * @property {String} message - 操作提示
+   * @property {Object} data - data
+   * @property {String} data.email - 注册邮箱
+   * 
+   * {
+   *  "success": true,
+   *  "message": "注册成功",
+   *  "data": {
+   *      "email": "2192559956@qq.com"
+   *  }
+   * }
+   */
   async register() {
     const { ctx } = this;
     const { email, password } = ctx.request.body;
@@ -113,7 +157,29 @@ class AuthController extends Controller {
     }
   }
 
-  // 用户登录
+  /**
+   * @summary 用户登录
+   * @router post /api/auth/login
+   * @request body string email 邮箱
+   * @request body string password 登录密码
+   * @property {Boolean} success - 是否成功
+   * @property {String} message - 操作提示
+   * @property {Object} data - data
+   * @property {String} data.token - 登录成功返回的token，用于后续认证
+   * @property {Object} data.user - 登录用户
+   * @property {String} data.user.email - 登录邮箱
+   * 
+   * {
+   *   "success": true,
+   *   "message": "登录成功",
+   *   "data": {
+   *       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiMjE5MjU1OTk1NkBxcS5jb20iLCJpYXQiOjE3NDU1NzM4NzUsImV4cCI6MTc0NTY2MDI3NX0.C7LjwmQqbcOr799ErXuuTt_SfHLzq9Z5oYbDUfae12g",
+   *       "user": {
+   *           "email": "2192559956@qq.com"
+   *       }
+   *   }
+   * }
+   */
   async login() {
     const { ctx } = this;
     const { email, password } = ctx.request.body;

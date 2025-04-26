@@ -2,6 +2,13 @@ const Service = require('egg').Service;
 const nodemailer = require('nodemailer');
 
 class EmailService extends Service {
+
+  /**
+   * 发送邮件
+   * @param {String} email - 邮箱
+   * @param {Number} code - 发送的验证码
+   * @return Boolean
+   */
   async sendVerificationCode(email, code) {
     const { app } = this;
     const transporter = nodemailer.createTransport(app.config.email);
