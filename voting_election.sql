@@ -11,7 +11,7 @@
  Target Server Version : 80037 (8.0.37)
  File Encoding         : 65001
 
- Date: 25/04/2025 21:48:27
+ Date: 26/04/2025 19:29:07
 */
 
 SET NAMES utf8mb4;
@@ -27,8 +27,9 @@ CREATE TABLE `candidates`  (
   `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_name_description`(`name` ASC, `description` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of candidates
@@ -49,16 +50,18 @@ CREATE TABLE `elections`  (
   `end_time` datetime NULL DEFAULT NULL,
   `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_title_description_isactive`(`title` ASC, `description` ASC, `is_active` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of elections
 -- ----------------------------
-INSERT INTO `elections` VALUES (1, '优秀程序员333', '选一位优选的程序员333', 0, '2025-04-25 11:28:06', '2025-04-25 11:33:16', '2025-04-25 10:17:35', '2025-04-25 11:33:16');
+INSERT INTO `elections` VALUES (1, '优秀程序员111', '选一位优选的程序员111', 0, '2025-04-25 11:28:06', '2025-04-25 11:33:16', '2025-04-25 10:17:35', '2025-04-26 19:23:48');
 INSERT INTO `elections` VALUES (2, '优秀程序员222', '选一位优选的程序员222', 0, '2025-04-25 10:24:56', '2025-04-25 10:50:34', '2025-04-25 10:24:56', '2025-04-25 10:50:34');
 INSERT INTO `elections` VALUES (3, '优秀程序员333', '选一位优选的程序员333', 1, '2025-04-25 10:52:09', '2025-04-26 06:52:09', '2025-04-25 10:52:09', '2025-04-25 10:52:09');
 INSERT INTO `elections` VALUES (4, '优秀程序员444', '选一位优选的程序员444', 1, '2025-04-25 12:12:32', '2025-04-26 08:12:32', '2025-04-25 12:12:32', '2025-04-25 12:12:32');
+INSERT INTO `elections` VALUES (5, '优秀程序员555', '选一位优选的程序员555', 1, '2025-04-26 05:17:06', '2025-04-27 01:17:06', '2025-04-26 05:17:06', '2025-04-26 05:17:06');
 
 -- ----------------------------
 -- Table structure for user
@@ -75,7 +78,7 @@ CREATE TABLE `user`  (
   `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `email`(`email` ASC) USING BTREE
+  UNIQUE INDEX `uiq_email`(`email` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -95,7 +98,8 @@ CREATE TABLE `vote`  (
   `voted_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_userid_candidateid_electionid`(`user_id` ASC, `candidate_id` ASC, `election_id` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
