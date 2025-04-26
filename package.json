@@ -1,7 +1,7 @@
 {
-  "name": "server-app",
+  "name": "voting_election",
   "version": "1.0.0",
-  "description": "server-message-board",
+  "description": "voting_election",
   "private": true,
   "egg": {
     "declarations": true
@@ -33,9 +33,9 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --title=egg-server-server-app",
-    "stop": "egg-scripts stop --title=egg-server-server-app",
-    "dev": "egg-bin dev --port 8090",
+    "start": "egg-scripts start --title=egg-server-voting_election",
+    "stop": "egg-scripts stop --title=egg-server-voting_election",
+    "dev": "egg-bin dev --port 7001",
     "debug": "egg-bin debug",
     "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "egg-bin test",
@@ -53,6 +53,6 @@
     "type": "git",
     "url": ""
   },
-  "author": "zengjielin",
+  "author": "zhenghuibin",
   "license": "MIT"
 }
