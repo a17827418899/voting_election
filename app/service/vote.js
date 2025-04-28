@@ -108,8 +108,8 @@ class VoteService extends Service {
 
   /**
    * 防止刷票
-   * @param {Date} start_time - 选举id
-   * @param {Date} end_time - 选举id
+   * @param {Date} start_time - 开始时间
+   * @param {Date} end_time - 结束时间
    * @return Boolean
    */
   async limitVoteCount(start_time, end_time) {
