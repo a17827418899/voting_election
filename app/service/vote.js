@@ -11,14 +11,17 @@ class VoteService extends Service {
   async submitVote(electionId, userId, candidateIds) {
     const { ctx, app } = this;
     
-    // 检查选举是否正在进行
-    const election = await ctx.model.Election.findOne({ where: { id: electionId } }, ['is_active']);
-    if (!election || !election.is_active) {
-      ctx.throw(400, '选择的选举不存在或选举未开始！');
+    // 检查候选人是否选择正确
+    const candidates = await ctx.model.Candidate.findAll({
+      where: { id: candidateIds, election_id: electionId }
+    });
+    
+    if (candidates.length !== candidateIds.length) {
+      ctx.throw(400, '请选择正确的候选人');
     }
     
     // 获取所有候选人数量
-    const candidateCount = await ctx.model.Candidate.count();
+    const candidateCount = await ctx.model.Candidate.count({ where: { election_id: electionId } });
     const maxVotes = Math.max(Math.floor(candidateCount * 0.2), 2);
     
     // 检查投票数量
@@ -26,20 +29,11 @@ class VoteService extends Service {
       ctx.throw(400, `每个用戶最多可以投${maxVotes}票`);
     }
     
-    // 检查候选人是否存在
-    const candidates = await ctx.model.Candidate.findAll({
-      where: { id: candidateIds }
-    });
-    
-    if (candidates.length !== candidateIds.length) {
-      ctx.throw(400, '请选择正确的候选人');
-    }
-    
     // 检查是否已经投过票了
     const existingVotes = await ctx.model.Vote.findAll({
       where: {
         user_id: userId,
-        election_id: election.id
+        election_id: electionId
       }
     });
     
@@ -55,7 +49,7 @@ class VoteService extends Service {
         return ctx.model.Vote.create({
           user_id: userId,
           candidate_id: candidateId,
-          election_id: election.id
+          election_id: electionId
         }, { transaction });
       });
       
@@ -110,6 +104,33 @@ class VoteService extends Service {
       });
     }
     return result;
+  }
+
+  /**
+   * 防止刷票
+   * @param {Date} start_time - 选举id
+   * @param {Date} end_time - 选举id
+   * @return Boolean
+   */
+  async limitVoteCount(start_time, end_time) {
+    const { ctx } = this;
+    
+    // 获取当前投票的机器ip
+    const currentIp = ctx.ip;
+    // 使用redis缓存（一台机器不能投超过10此票）
+    const largestCount = 10;
+    const ipVoteKey = `ipVoteKey:${currentIp}`;
+    let ipVoteResult = await ctx.service.cache.getCache(ipVoteKey);
+    console.log(ipVoteResult);
+    if (!ipVoteResult || ipVoteResult < largestCount) {
+      // 计算选举的有效时间
+      const effectiveTime = (end_time - start_time) / 1000;
+      ipVoteResult = ipVoteResult ? ipVoteResult ++ : 1;
+      console.log(effectiveTime);
+      await ctx.service.cache.setCache(ipVoteKey, ipVoteResult, effectiveTime);
+      return false;
+    }
+    return true;
   }
 }
 

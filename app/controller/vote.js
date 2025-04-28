@@ -24,8 +24,28 @@ class VoteController extends Controller {
     const { ctx } = this;
     const { electionId, candidateIds } = ctx.request.body;
     // 从上下文中获取用户ID
-    const userId = ctx.session.user.id; 
+    const userId = ctx.session.user.id;
+    // 检查选举是否正在进行
+    const election = await ctx.model.Election.findOne({ where: { id: electionId } }, ['is_active', 'start_time', 'end_time']);
+    if (!election || !election.is_active) {
+      ctx.body = {
+        success: false,
+        message: '选择的选举不存在或选举未开始！',
+      };
+      ctx.status = 400;
+      return;
+    }
 
+    const { start_time, end_time } = election;
+    const isMoreThanCount = await ctx.service.vote.limitVoteCount(start_time, end_time);
+    if (isMoreThanCount) {
+      ctx.body = {
+        success: false,
+        message: '当前机器已投票超过10次，存在刷票嫌疑',
+      };
+      ctx.status = 400;
+      return;
+    }
     // 验证输入
     if (!candidateIds || !Array.isArray(candidateIds) || candidateIds.length === 0) {
       ctx.body = {

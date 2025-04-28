@@ -11,9 +11,9 @@ class CandidateService extends Service {
    * @param {String} keyword - 搜索关键词
    * @return Object
    */
-  async list(page = 1, pageSize = 10, keyword = '') {
+  async list(electionId, page = 1, pageSize = 10, keyword = '') {
     const { ctx } = this;
-    const where = {};
+    const where = { election_id: electionId };
 
     // 搜索条件
     if (keyword) {
@@ -41,24 +41,26 @@ class CandidateService extends Service {
 
   /**
    * 新增候选人
+   * @param {Number} electionId - 候选人名称
    * @param {String} name - 候选人名称
    * @param {String} description - 候选人描述
    * @return Object
    */
-  async create(name, description) {
-    const { ctx } = this; 
+  async create(electionId, name, description) {
+    const { ctx } = this;
     // 验证输入
     if (!name || name.length > 50) {
       ctx.throw(400, '候选人姓名不能为空且不超过50字');
     }
 
     // 防止重复创建
-    const exist = await ctx.model.Candidate.findOne({ where: { name } });
+    const exist = await ctx.model.Candidate.findOne({ where: { election_id: electionId, name } });
     if (exist) {
       ctx.throw(409, '候选人已存在');
     }
 
     return await ctx.model.Candidate.create({
+      election_id: electionId,
       name,
       description,
     });

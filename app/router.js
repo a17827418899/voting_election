@@ -14,9 +14,9 @@ module.exports = app => {
   
   // 候选人相关
   router.get('/api/candidates/list', middleware.checkLogin(), controller.candidate.list);
-  router.post('/api/candidates/create', middleware.checkLogin(), middleware.adminAuth(), controller.candidate.create);
-  router.put('/api/candidates/update/:id', middleware.checkLogin(), middleware.adminAuth(), controller.candidate.update);
-  router.put('/api/candidates/destroy/:id', middleware.checkLogin(), middleware.adminAuth(), controller.candidate.destroy);
+  router.post('/api/candidates/create', middleware.checkLogin(), middleware.adminAuth(), middleware.checkElection(), controller.candidate.create);
+  router.put('/api/candidates/update/:id', middleware.checkLogin(), middleware.adminAuth(), middleware.checkElection(), controller.candidate.update);
+  router.put('/api/candidates/destroy/:id', middleware.checkLogin(), middleware.adminAuth(), middleware.checkElection(), controller.candidate.destroy);
 
   // 选举控制
   router.get('/api/admin/election/list', middleware.checkLogin(), middleware.adminAuth(), controller.admin.electionList);

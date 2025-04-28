@@ -11,7 +11,7 @@
  Target Server Version : 80037 (8.0.37)
  File Encoding         : 65001
 
- Date: 26/04/2025 19:29:07
+ Date: 28/04/2025 19:47:18
 */
 
 SET NAMES utf8mb4;
@@ -23,19 +23,21 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `candidates`;
 CREATE TABLE `candidates`  (
   `id` int NOT NULL AUTO_INCREMENT,
+  `election_id` int NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_name_description`(`name` ASC, `description` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of candidates
 -- ----------------------------
-INSERT INTO `candidates` VALUES (1, '小滨', '程序员', '2025-04-25 09:57:29', '2025-04-25 10:03:45');
-INSERT INTO `candidates` VALUES (2, '大滨', '后端程序员', '2025-04-25 10:04:50', '2025-04-25 10:04:50');
+INSERT INTO `candidates` VALUES (1, 3, '小滨', '程序员', '2025-04-25 09:57:29', '2025-04-28 18:42:55');
+INSERT INTO `candidates` VALUES (2, 4, '大滨', '后端程序员', '2025-04-25 10:04:50', '2025-04-28 18:42:58');
+INSERT INTO `candidates` VALUES (6, 5, '中中滨', '后端程序员222333', '2025-04-28 11:14:17', '2025-04-28 19:23:48');
 
 -- ----------------------------
 -- Table structure for elections
@@ -100,7 +102,7 @@ CREATE TABLE `vote`  (
   `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_userid_candidateid_electionid`(`user_id` ASC, `candidate_id` ASC, `election_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of vote
@@ -110,5 +112,6 @@ INSERT INTO `vote` VALUES (2, 1, 1, 3, '2025-04-25 10:53:35', '2025-04-25 10:53:
 INSERT INTO `vote` VALUES (3, 1, 2, 3, '2025-04-25 10:53:35', '2025-04-25 10:53:35', '2025-04-25 10:53:35');
 INSERT INTO `vote` VALUES (4, 1, 1, 4, '2025-04-25 12:17:24', '2025-04-25 12:17:24', '2025-04-25 12:17:24');
 INSERT INTO `vote` VALUES (5, 1, 2, 4, '2025-04-25 12:17:24', '2025-04-25 12:17:24', '2025-04-25 12:17:24');
+INSERT INTO `vote` VALUES (6, 1, 6, 5, '2025-04-28 11:28:37', '2025-04-28 11:28:37', '2025-04-28 11:28:37');
 
 SET FOREIGN_KEY_CHECKS = 1;
